@@ -2,9 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
-import 'SecondRoute.dart';
+import '../../food-shop/main_route.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -14,9 +13,9 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final _auth = FirebaseAuth.instance;
 
-  String email;
+  String email = '';
 
-  String password;
+  String password = '';
 
   @override
   Widget build(BuildContext context) {
@@ -92,31 +91,22 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: ElevatedButton(
                     child: Text('login'),
                     onPressed: () async {
-                      if (email != null && password != null) {
+                      if (email != '' && password != '') {
                         try {
                           var newUser = await _auth.signInWithEmailAndPassword(
                               email: email, password: password);
-                          if (newUser != null) {
+                          if (newUser != '') {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => SecondRoute(),
+                                builder: (context) => MainRoute(),
                               ),
                             );
                           }
                         } catch (e) {
                           print(e);
                         }
-                      } else {
-                        Fluttertoast.showToast(
-                            msg: "Please enter your both email and password",
-                            toastLength: Toast.LENGTH_LONG,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.black,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
-                      }
+                      } else {}
                     },
                   ),
                 )

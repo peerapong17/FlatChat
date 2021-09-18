@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class History extends StatelessWidget {
+class UserSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text('history'),
+      child: Text('Setting'),
     );
   }
 }

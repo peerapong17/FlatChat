@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "362240422633",
-    "project_id": "shop-68288",
-    "storage_bucket": "shop-68288.appspot.com"
+    "project_number": "564727543790",
+    "project_id": "foodshop-774df",
+    "storage_bucket": "foodshop-774df.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:362240422633:android:ed40ff3b402fafa94cb678",
+        "mobilesdk_app_id": "1:564727543790:android:d27601b3fa491276ca40ff",
         "android_client_info": {
           "package_name": "com.mooping.FoodMadeToOrder"
         }
       },
       "oauth_client": [
         {
-          "client_id": "362240422633-vrlojc7ropir9mhdr5pcbo2mkpqqd4m3.apps.googleusercontent.com",
+          "client_id": "564727543790-o4dbfltjr18ukogqn1umj6h5rhhg7iv7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCENqYGx8wQeNOH9lBivXDdQxx8AEco6k8"
+          "current_key": "AIzaSyA7sW0h6lcQubVL-I_NZ9qAzSmPN9yw79g"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "362240422633-vrlojc7ropir9mhdr5pcbo2mkpqqd4m3.apps.googleusercontent.com",
+              "client_id": "564727543790-o4dbfltjr18ukogqn1umj6h5rhhg7iv7.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-import 'SecondRoute.dart';
+import '../../food-shop/main_route.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -55,7 +55,7 @@ class _RegisterState extends State<Register> {
                         decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey[500],
+                              color: Colors.grey.shade500,
                               blurRadius: 5,
                               offset: Offset(2, 2),
                             ),
@@ -65,7 +65,7 @@ class _RegisterState extends State<Register> {
                         ),
                         child: TextFormField(
                           validator: (email) {
-                            if (email.isEmpty) {
+                            if (email!.isEmpty) {
                               return 'Text is empty';
                             }
                             return null;
@@ -88,7 +88,7 @@ class _RegisterState extends State<Register> {
                         decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey[500],
+                              color: Colors.grey.shade500,
                               blurRadius: 5,
                               offset: Offset(2, 2),
                             )
@@ -137,7 +137,7 @@ class _RegisterState extends State<Register> {
                           onPressed: () async {
                             var newUser;
                             try {
-                              if (_formKey.currentState.validate()) {
+                              if (_formKey.currentState!.validate()) {
                                 newUser =
                                     await _auth.createUserWithEmailAndPassword(
                                         email: emailController.text,
@@ -146,7 +146,7 @@ class _RegisterState extends State<Register> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => SecondRoute()),
+                                        builder: (context) => MainRoute()),
                                   );
                                 }
                               }
