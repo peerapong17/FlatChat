@@ -3,13 +3,15 @@ import 'package:login_ui/food-shop/models/food_order.dart';
 import 'package:login_ui/food-shop/state/cart.dart';
 
 class FoodDetail extends StatefulWidget {
+  final String id;
   final String foodName;
   final String image;
   final String price;
   final Cart cart;
 
   FoodDetail(
-      {required this.foodName,
+      {required this.id,
+      required this.foodName,
       required this.image,
       required this.price,
       required this.cart});
@@ -38,7 +40,7 @@ class _FoodDetailState extends State<FoodDetail> {
             icon: Icon(
               Icons.add_circle_outline_outlined,
             ),
-            onPressed: () {
+            onPressed: () async {
               Iterable<FoodOrder> foundMenu =
                   cart.where((element) => element.name == widget.foodName);
               if (foundMenu.isNotEmpty) {
@@ -50,6 +52,7 @@ class _FoodDetailState extends State<FoodDetail> {
               } else {
                 cart.add(
                   FoodOrder(
+                      id: widget.id,
                       image: widget.image,
                       name: widget.foodName,
                       price: widget.price,

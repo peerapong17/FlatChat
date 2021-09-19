@@ -36,7 +36,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: TextField(
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
-                    onChanged: (value) {
+                    onChanged: (String value) {
                       email = value;
                     },
                     decoration: InputDecoration(
@@ -62,7 +62,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   child: TextField(
                     keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
+                    textInputAction: TextInputAction.done,
                     onChanged: (value) {
                       password = value;
                     },
@@ -93,16 +93,14 @@ class _SignInScreenState extends State<SignInScreen> {
                     onPressed: () async {
                       if (email != '' && password != '') {
                         try {
-                          var newUser = await _auth.signInWithEmailAndPassword(
+                          await _auth.signInWithEmailAndPassword(
                               email: email, password: password);
-                          if (newUser != '') {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MainRoute(),
-                              ),
-                            );
-                          }
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MainRoute(),
+                            ),
+                          );
                         } catch (e) {
                           print(e);
                         }

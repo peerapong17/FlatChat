@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:login_ui/food-shop/components/delimiters.dart';
-import 'package:login_ui/food-shop/components/food_menu_card.dart';
 import 'package:login_ui/food-shop/models/List-item/hot_food_list.dart';
 import 'package:login_ui/food-shop/models/List-item/food_menu_list.dart';
 import 'package:login_ui/food-shop/models/food_menu.dart';
@@ -21,7 +20,7 @@ class _FoodState extends State<Food> {
   @override
   Widget build(BuildContext context) {
     return Consumer<Cart>(
-      builder: (context, cart, child) =>  Container(
+      builder: (context, cart, child) => Container(
         width: double.infinity,
         height: double.infinity,
         child: Column(
@@ -90,11 +89,11 @@ class _FoodState extends State<Food> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => FoodDetail(
-                              foodName: foodMenu.name,
-                              image: foodMenu.image,
-                              price: foodMenu.price,
-                              cart: cart
-                            ),
+                                id: foodMenu.id,
+                                foodName: foodMenu.name,
+                                image: foodMenu.image,
+                                price: foodMenu.price,
+                                cart: cart),
                           ),
                         );
                       },
