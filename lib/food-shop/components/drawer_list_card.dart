@@ -21,18 +21,19 @@ class DrawerList extends StatelessWidget {
       onTap: isLoggedOut != null
           ? () {
               showAlertDialog(
-                  context: context,
-                  title: "Are you sure?",
-                  content: "Thank for using our service.",
-                  onTap: () {
-                    Navigator.push(
+                context: context,
+                title: "Are you sure?",
+                content: "Thank for using our service.",
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
                       context,
                       CupertinoPageRoute(builder: (context) => page),
-                    );
-                  });
+                      (route) => false);
+                },
+              );
             }
           : () {
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 CupertinoPageRoute(builder: (context) => page),
               );
