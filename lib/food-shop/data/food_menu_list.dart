@@ -1,4 +1,4 @@
-import '../food_menu.dart';
+import 'package:login_ui/food-shop/models/food_menu.dart';
 
 List<FoodMenu> listFoodMenu = [
   FoodMenu(

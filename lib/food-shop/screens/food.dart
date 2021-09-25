@@ -1,8 +1,7 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:login_ui/food-shop/components/delimiters.dart';
-import 'package:login_ui/food-shop/models/List-item/hot_food_list.dart';
-import 'package:login_ui/food-shop/models/List-item/food_menu_list.dart';
+import 'package:login_ui/food-shop/data/food_menu_list.dart';
 import 'package:login_ui/food-shop/models/food_menu.dart';
 import 'package:login_ui/food-shop/state/cart.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +15,11 @@ class Food extends StatefulWidget {
 
 class _FoodState extends State<Food> {
   int currentPage = 0;
+  List<String> hotFoodList = [
+  'assets/images/ต้มยำกุ้ง.jpg',
+  'assets/images/ข้าวผัด.jpg',
+  'assets/images/ผัดไทย.jpg'
+];
 
   @override
   Widget build(BuildContext context) {
@@ -32,39 +36,20 @@ class _FoodState extends State<Food> {
                   fontSize: 40,
                   color: Colors.red,
                 )),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(60),
-              ),
-              height: 200,
-              width: double.infinity,
-              child: PageView.builder(
-                onPageChanged: (index) {
-                  setState(() {
-                    currentPage = index;
-                  });
-                },
-                itemCount: hotFoodList.length,
-                itemBuilder: (context, index) {
-                  return Image.asset(
-                    hotFoodList[index]['image']!,
-                    fit: BoxFit.contain,
+            CarouselSlider(
+              options: CarouselOptions(height: 200.0, autoPlay: true, aspectRatio: 16/9),
+              items: hotFoodList.map(
+                (i) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return Image.asset(
+                        i,
+                        fit: BoxFit.cover,
+                      );
+                    },
                   );
                 },
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              margin: EdgeInsets.only(top: 7),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  hotFoodList.length,
-                  (index) {
-                    return delimiters(index: index, currentPage: currentPage);
-                  },
-                ),
-              ),
+              ).toList(),
             ),
             SizedBox(
               height: 17,
@@ -78,8 +63,12 @@ class _FoodState extends State<Food> {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 3),
                     child: ListTile(
-                      leading: Image(
-                        image: AssetImage(foodMenu.image),
+                      leading: ClipRRect(
+                        borderRadius: BorderRadius.circular(7),
+                        child: Image(
+                          image: AssetImage(foodMenu.image),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                       title: Text(foodMenu.name),
                       subtitle: Text(foodMenu.price),

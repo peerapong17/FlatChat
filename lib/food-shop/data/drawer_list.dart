@@ -4,7 +4,6 @@ import 'package:login_ui/food-shop/drawer/drawer-list/shop_map.dart';
 import 'package:login_ui/food-shop/drawer/drawer-list/user_history.dart';
 import 'package:login_ui/food-shop/drawer/drawer-list/user_profile.dart';
 import 'package:login_ui/food-shop/drawer/drawer-list/user_setting.dart';
-import '../drawer.dart';
 import 'package:login_ui/food-shop/models/drawer.dart';
 
 List<DrawerModel> drawerList = [

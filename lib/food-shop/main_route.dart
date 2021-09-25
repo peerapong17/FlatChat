@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:login_ui/food-shop/cart/cart_detail.dart';
+import 'package:login_ui/food-shop/screens/cart_detail.dart';
+import 'package:login_ui/food-shop/screens/dessert.dart';
+import 'package:login_ui/food-shop/screens/drink.dart';
+import 'package:login_ui/food-shop/screens/food.dart';
 import 'package:login_ui/food-shop/state/cart.dart';
 import 'package:provider/provider.dart';
+import 'data/drawer_list.dart';
 import 'drawer/drawer-header/drawer_list.dart';
-import 'food/dessert.dart';
 import 'components/drawer_list_card.dart';
-import 'food/drink.dart';
-import 'food/food.dart';
-import 'models/List-item/drawer_list.dart';
 
 class MainRoute extends StatefulWidget {
   @override
@@ -24,14 +24,12 @@ class _MainRouteState extends State<MainRoute> {
       create: (_) => Cart(),
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
           elevation: 0,
           leading: Builder(
             builder: (BuildContext context) {
               return IconButton(
                 icon: const Icon(
                   Icons.menu,
-                  color: Colors.black,
                 ),
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
@@ -44,7 +42,6 @@ class _MainRouteState extends State<MainRoute> {
             'Food Shop',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.black,
               fontSize: 25,
             ),
           ),
