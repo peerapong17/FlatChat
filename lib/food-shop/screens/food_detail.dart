@@ -3,6 +3,9 @@ import 'package:login_ui/food-shop/data/food_menu_list.dart';
 import 'package:login_ui/food-shop/models/food_menu.dart';
 import 'package:login_ui/food-shop/models/food_order.dart';
 import 'package:login_ui/food-shop/state/cart.dart';
+import 'package:login_ui/utils/build_elevated_button.dart';
+import 'package:login_ui/utils/build_icon.dart';
+import 'package:login_ui/utils/build_icon_button.dart';
 
 class FoodDetail extends StatefulWidget {
   final String id;
@@ -194,23 +197,12 @@ class _FoodDetailState extends State<FoodDetail> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              GestureDetector(
-                                onTap: () {
+                              buildIconButton(
+                                Icons.add,
+                                () {
                                   amount += 1;
                                   setState(() {});
                                 },
-                                child: Container(
-                                  padding: EdgeInsets.all(3),
-                                  decoration: BoxDecoration(
-                                    color: Colors.black54,
-                                    borderRadius: BorderRadius.circular(13),
-                                  ),
-                                  child: Icon(
-                                    Icons.add,
-                                    size: 30,
-                                    color: Colors.white,
-                                  ),
-                                ),
                               ),
                               SizedBox(
                                 width: 7,
@@ -222,8 +214,9 @@ class _FoodDetailState extends State<FoodDetail> {
                               SizedBox(
                                 width: 7,
                               ),
-                              GestureDetector(
-                                onTap: () {
+                              buildIconButton(
+                                Icons.remove,
+                                () {
                                   if (amount > 1) {
                                     amount -= 1;
                                   } else {
@@ -231,53 +224,34 @@ class _FoodDetailState extends State<FoodDetail> {
                                   }
                                   setState(() {});
                                 },
-                                child: Container(
-                                  padding: EdgeInsets.all(3),
-                                  decoration: BoxDecoration(
-                                    color: Colors.black54,
-                                    borderRadius: BorderRadius.circular(13),
-                                  ),
-                                  child: Icon(
-                                    Icons.remove,
-                                    size: 30,
-                                    color: Colors.white,
-                                  ),
-                                ),
                               ),
                             ],
                           ),
                         ),
-                        Expanded(
-                          child: ElevatedButton(
-                            child: Text("Add To Card"),
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.green.shade500,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(23),
-                              ),
-                            ),
-                            onPressed: () async {
-                              bool foundMenu = cart.any(
-                                  (element) => element.name == widget.foodName);
-                              if (foundMenu) {
-                                for (int i = 0; i < cart.length; i++) {
-                                  if (cart[i].name == widget.foodName) {
-                                    cart[i].amount += amount;
-                                  }
+                        buildElevatedButton(
+                          "Add To Card",
+                          Colors.green.shade500,
+                          () async {
+                            bool orderExist = cart.any(
+                                (element) => element.name == widget.foodName);
+                            if (orderExist) {
+                              for (int i = 0; i < cart.length; i++) {
+                                if (cart[i].name == widget.foodName) {
+                                  cart[i].amount += amount;
                                 }
-                              } else {
-                                cart.add(
-                                  FoodOrder(
-                                      id: widget.id,
-                                      image: widget.image,
-                                      name: widget.foodName,
-                                      price: widget.price,
-                                      amount: amount),
-                                );
                               }
-                            },
-                          ),
-                        )
+                            } else {
+                              cart.add(
+                                FoodOrder(
+                                    id: widget.id,
+                                    image: widget.image,
+                                    name: widget.foodName,
+                                    price: widget.price,
+                                    amount: amount),
+                              );
+                            }
+                          },
+                        ),
                       ],
                     ),
                   )
@@ -287,18 +261,6 @@ class _FoodDetailState extends State<FoodDetail> {
           ],
         ),
       ),
-    );
-  }
-
-  Row buildIcon(IconData icon, String text) {
-    return Row(
-      children: [
-        Icon(icon),
-        SizedBox(
-          width: 3,
-        ),
-        Text(text),
-      ],
     );
   }
 }

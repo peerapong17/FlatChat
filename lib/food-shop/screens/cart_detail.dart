@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:login_ui/food-shop/state/cart.dart';
+import 'package:login_ui/utils/build_elevated_button.dart';
+import 'package:login_ui/utils/build_icon_button.dart';
 import 'package:login_ui/utils/show_toast.dart';
 import 'package:provider/provider.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class CartDetail extends StatefulWidget {
   const CartDetail({Key? key}) : super(key: key);
@@ -40,10 +41,23 @@ class _CartDetailState extends State<CartDetail> {
                         height: MediaQuery.of(context).size.height * 0.6,
                         child: ListView(
                           scrollDirection: Axis.vertical,
-                          children: [
-                            ...cart.cart.map(
-                              (order) {
-                                return ListTile(
+                          children: cart.cart.map(
+                            (order) {
+                              var index = cart.cart.indexOf(order);
+                              return Dismissible(
+                                key: UniqueKey(),
+                                onDismissed: (direction) {
+                                  setState(() {
+                                    cart.cart.removeAt(index);
+                                  });
+                                },
+                                background: Container(
+                                  padding: EdgeInsets.only(left: 20),
+                                  alignment: Alignment.centerLeft,
+                                  child: Icon(Icons.delete),
+                                  color: Colors.red,
+                                ),
+                                child: ListTile(
                                   onTap: () {},
                                   leading: Image(
                                     image: AssetImage(order.image),
@@ -53,54 +67,54 @@ class _CartDetailState extends State<CartDetail> {
                                   trailing: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Container(
-                                        padding: EdgeInsets.all(8),
-                                        color: Colors.white70,
-                                        child: IconButton(
-                                          icon: Icon(Icons.add),
-                                          onPressed: () {
-                                            for (var i = 0;
-                                                i < cart.cart.length;
-                                                i++) {
-                                              if (order.id == cart.cart[i].id) {
-                                                cart.cart[i].amount++;
-                                              }
+                                      buildIconButton(
+                                        Icons.add,
+                                        () {
+                                          for (var i = 0;
+                                              i < cart.cart.length;
+                                              i++) {
+                                            if (order.id == cart.cart[i].id) {
+                                              cart.cart[i].amount++;
                                             }
-                                            setState(() {});
-                                          },
-                                        ),
+                                          }
+                                          setState(() {});
+                                        },
+                                      ),
+                                      SizedBox(
+                                        width: 7,
                                       ),
                                       Text(
                                         order.amount.toString(),
-                                        style: TextStyle(fontSize: 27),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline5,
                                       ),
-                                      Container(
-                                        padding: EdgeInsets.all(8),
-                                        color: Colors.white70,
-                                        child: IconButton(
-                                          icon: Icon(Icons.remove),
-                                          onPressed: () {
-                                            for (var i = 0;
-                                                i < cart.cart.length;
-                                                i++) {
-                                              if (order.id == cart.cart[i].id) {
-                                                if (cart.cart[i].amount > 0) {
-                                                  cart.cart[i].amount--;
-                                                } else {
-                                                  cart.cart[i].amount = 0;
-                                                }
+                                      SizedBox(
+                                        width: 7,
+                                      ),
+                                      buildIconButton(
+                                        Icons.remove,
+                                        () {
+                                          for (var i = 0;
+                                              i < cart.cart.length;
+                                              i++) {
+                                            if (order.id == cart.cart[i].id) {
+                                              if (cart.cart[i].amount > 0) {
+                                                cart.cart[i].amount--;
+                                              } else {
+                                                cart.cart.removeAt(index);
                                               }
                                             }
-                                            setState(() {});
-                                          },
-                                        ),
+                                          }
+                                          setState(() {});
+                                        },
                                       ),
                                     ],
                                   ),
-                                );
-                              },
-                            ),
-                          ],
+                                ),
+                              );
+                            },
+                          ).toList(),
                         ),
                       ),
                       Padding(
@@ -126,25 +140,17 @@ class _CartDetailState extends State<CartDetail> {
                       Container(
                         height: 50,
                         margin: EdgeInsets.all(10),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.green.shade500,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(23),
-                            ),
-                          ),
-                          onPressed: () {
+                        child: buildElevatedButton(
+                          "CheckOut",
+                          Colors.green.shade500,
+                          () {
                             cart.cart = [];
                             total = 0;
                             setState(() {});
                             showToast("Order success", Colors.green);
                           },
-                          child: Text(
-                            "Checkout",
-                            style: TextStyle(fontSize: 23),
-                          ),
                         ),
-                      )
+                      ),
                     ],
                   ),
           ),

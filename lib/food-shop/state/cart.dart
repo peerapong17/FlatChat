@@ -16,11 +16,4 @@ class Cart {
     _total = total;
   }
 
-  // int calcTotal() {
-  //   print("calcTotal working");
-  //   for (var i = 0; i < cart.length; i++) {
-  //     total += cart[i].amount * int.parse(cart[i].price);
-  //   }
-  //   return total;
-  // }
 }
