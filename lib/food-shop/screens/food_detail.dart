@@ -6,20 +6,20 @@ import 'package:login_ui/food-shop/state/cart.dart';
 import 'package:login_ui/utils/build_elevated_button.dart';
 import 'package:login_ui/utils/build_icon.dart';
 import 'package:login_ui/utils/build_icon_button.dart';
+import 'package:provider/provider.dart';
 
 class FoodDetail extends StatefulWidget {
   final String id;
   final String foodName;
   final String image;
   final String price;
-  final Cart cart;
 
-  FoodDetail(
-      {required this.id,
-      required this.foodName,
-      required this.image,
-      required this.price,
-      required this.cart});
+  FoodDetail({
+    required this.id,
+    required this.foodName,
+    required this.image,
+    required this.price,
+  });
 
   @override
   State<FoodDetail> createState() => _FoodDetailState();
@@ -36,7 +36,6 @@ class _FoodDetailState extends State<FoodDetail> {
 
   @override
   Widget build(BuildContext context) {
-    List<FoodOrder> cart = widget.cart.cart;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -228,28 +227,34 @@ class _FoodDetailState extends State<FoodDetail> {
                             ],
                           ),
                         ),
-                        buildElevatedButton(
-                          "Add To Card",
-                          Colors.green.shade500,
-                          () async {
-                            bool orderExist = cart.any(
-                                (element) => element.name == widget.foodName);
-                            if (orderExist) {
-                              for (int i = 0; i < cart.length; i++) {
-                                if (cart[i].name == widget.foodName) {
-                                  cart[i].amount += amount;
+                        Consumer<Cart>(
+                          builder: (context, cart, child) {
+                            var shopingCart = cart.cart;
+                            return buildElevatedButton(
+                              "Add To Card",
+                              Colors.green.shade500,
+                              () async {
+                                bool orderExist = shopingCart.any((element) =>
+                                    element.name == widget.foodName);
+                                if (orderExist) {
+                                  for (int i = 0; i < shopingCart.length; i++) {
+                                    if (shopingCart[i].name ==
+                                        widget.foodName) {
+                                      shopingCart[i].amount += amount;
+                                    }
+                                  }
+                                } else {
+                                  shopingCart.add(
+                                    FoodOrder(
+                                        id: widget.id,
+                                        image: widget.image,
+                                        name: widget.foodName,
+                                        price: widget.price,
+                                        amount: amount),
+                                  );
                                 }
-                              }
-                            } else {
-                              cart.add(
-                                FoodOrder(
-                                    id: widget.id,
-                                    image: widget.image,
-                                    name: widget.foodName,
-                                    price: widget.price,
-                                    amount: amount),
-                              );
-                            }
+                              },
+                            );
                           },
                         ),
                       ],

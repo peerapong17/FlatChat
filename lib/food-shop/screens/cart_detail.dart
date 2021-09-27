@@ -13,13 +13,11 @@ class CartDetail extends StatefulWidget {
 }
 
 class _CartDetailState extends State<CartDetail> {
-  int total = 0;
-
   @override
   Widget build(BuildContext context) {
     return Consumer<Cart>(
       builder: (context, cart, child) {
-        total = 0;
+        int total = 0;
         for (var i = 0; i < cart.cart.length; i++) {
           total += cart.cart[i].amount * int.parse(cart.cart[i].price);
         }
@@ -29,9 +27,13 @@ class _CartDetailState extends State<CartDetail> {
             height: double.infinity,
             child: cart.cart.length == 0
                 ? Center(
-                    child: Text(
-                      "No order yet, Let's add some!",
-                      style: Theme.of(context).textTheme.headline5,
+                    child: Row(
+                      children: [
+                        Text(
+                          "No order yet, Let's add some!",
+                          style: Theme.of(context).textTheme.headline5,
+                        ),
+                      ],
                     ),
                   )
                 : Column(
