@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:login_ui/food-shop/data/food_menu_list.dart';
 import 'package:login_ui/food-shop/models/food_menu.dart';
 import 'package:login_ui/food-shop/models/food_order.dart';
-import 'package:login_ui/food-shop/state/cart.dart';
+import 'package:login_ui/food-shop/state/cart_provider.dart';
 import 'package:login_ui/utils/build_elevated_button.dart';
 import 'package:login_ui/utils/build_icon.dart';
 import 'package:login_ui/utils/build_icon_button.dart';
 import 'package:provider/provider.dart';
 
-class FoodDetail extends StatefulWidget {
+class FoodDetail extends StatelessWidget {
   final String id;
   final String foodName;
   final String image;
@@ -21,21 +21,13 @@ class FoodDetail extends StatefulWidget {
     required this.price,
   });
 
-  @override
-  State<FoodDetail> createState() => _FoodDetailState();
-}
-
-class _FoodDetailState extends State<FoodDetail> {
-  int price = 0;
   int amount = 1;
 
-  @override
-  void initState() {
-    price = int.parse(widget.price);
-  }
+  void dispose() {}
 
   @override
   Widget build(BuildContext context) {
+    print("refresh");
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -57,7 +49,7 @@ class _FoodDetailState extends State<FoodDetail> {
                       bottomRight: Radius.circular(17),
                     ),
                     child: Image.asset(
-                      widget.image,
+                      image,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -92,7 +84,7 @@ class _FoodDetailState extends State<FoodDetail> {
                       borderRadius: BorderRadius.circular(7),
                     ),
                     child: Text(
-                      widget.foodName,
+                      foodName,
                       style: TextStyle(fontSize: 30, color: Colors.white),
                     ),
                   ),
@@ -107,7 +99,7 @@ class _FoodDetailState extends State<FoodDetail> {
                       borderRadius: BorderRadius.circular(7),
                     ),
                     child: Text(
-                      "\$${widget.price}",
+                      "\$$price",
                       style: TextStyle(fontSize: 30, color: Colors.white),
                     ),
                   ),
@@ -184,81 +176,80 @@ class _FoodDetailState extends State<FoodDetail> {
                     decoration: BoxDecoration(
                         border: Border(
                             top: BorderSide(color: Colors.grey, width: 1))),
-                    child: Row(
-                      children: [
-                        Container(
-                          child: Text(
-                            "\$${price * amount}",
-                            style: Theme.of(context).textTheme.headline5,
+                    child:
+                        Consumer<CartProvider>(builder: (context, cartProvider, child) {
+                      return Row(
+                        children: [
+                          Container(
+                            child: Text(
+                              "\$${int.parse(price) * cartProvider.amount}",
+                              style: Theme.of(context).textTheme.headline5,
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              buildIconButton(
-                                Icons.add,
-                                () {
-                                  amount += 1;
-                                  setState(() {});
-                                },
-                              ),
-                              SizedBox(
-                                width: 7,
-                              ),
-                              Text(
-                                amount.toString(),
-                                style: Theme.of(context).textTheme.headline5,
-                              ),
-                              SizedBox(
-                                width: 7,
-                              ),
-                              buildIconButton(
-                                Icons.remove,
-                                () {
-                                  if (amount > 1) {
-                                    amount -= 1;
-                                  } else {
-                                    amount = 1;
-                                  }
-                                  setState(() {});
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                        Consumer<Cart>(
-                          builder: (context, cart, child) {
-                            var shopingCart = cart.cart;
-                            return buildElevatedButton(
-                              "Add To Card",
-                              Colors.green.shade500,
-                              () async {
-                                bool orderExist = shopingCart.any((element) =>
-                                    element.name == widget.foodName);
-                                if (orderExist) {
-                                  for (int i = 0; i < shopingCart.length; i++) {
-                                    if (shopingCart[i].name ==
-                                        widget.foodName) {
-                                      shopingCart[i].amount += amount;
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                buildIconButton(
+                                  Icons.add,
+                                  () {
+                                    cartProvider.amount += 1;
+                                  },
+                                ),
+                                SizedBox(
+                                  width: 7,
+                                ),
+                                Text(
+                                  cartProvider.amount.toString(),
+                                  style: Theme.of(context).textTheme.headline5,
+                                ),
+                                SizedBox(
+                                  width: 7,
+                                ),
+                                buildIconButton(
+                                  Icons.remove,
+                                  () {
+                                    if (cartProvider.amount > 1) {
+                                      cartProvider.amount -= 1;
+                                    } else {
+                                      cartProvider.amount = 1;
                                     }
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          buildElevatedButton(
+                            "Add To Card",
+                            Colors.green.shade500,
+                            40,
+                            19,
+                            () async {
+                              bool orderExist = cartProvider.cart
+                                  .any((element) => element.name == foodName);
+                              if (orderExist) {
+                                for (int i = 0;
+                                    i < cartProvider.cart.length;
+                                    i++) {
+                                  if (cartProvider.cart[i].name == foodName) {
+                                    cartProvider.cart[i].amount += cartProvider.amount;
                                   }
-                                } else {
-                                  shopingCart.add(
-                                    FoodOrder(
-                                        id: widget.id,
-                                        image: widget.image,
-                                        name: widget.foodName,
-                                        price: widget.price,
-                                        amount: amount),
-                                  );
                                 }
-                              },
-                            );
-                          },
-                        ),
-                      ],
-                    ),
+                              } else {
+                                cartProvider.cart.add(
+                                  FoodOrder(
+                                      id: id,
+                                      image: image,
+                                      name: foodName,
+                                      price: price,
+                                      amount: cartProvider.amount),
+                                );
+                              }
+                            },
+                          ),
+                        ],
+                      );
+                    }),
                   )
                 ],
               ),

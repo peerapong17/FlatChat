@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:login_ui/food-shop/state/cart.dart';
+import 'package:intl/intl.dart';
+import 'package:login_ui/food-shop/models/bill.dart';
+import 'package:login_ui/food-shop/state/bill_provider.dart';
+import 'package:login_ui/food-shop/state/cart_provider.dart';
 import 'package:login_ui/utils/build_elevated_button.dart';
 import 'package:login_ui/utils/build_icon_button.dart';
 import 'package:login_ui/utils/show_toast.dart';
@@ -15,26 +18,23 @@ class CartDetail extends StatefulWidget {
 class _CartDetailState extends State<CartDetail> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<Cart>(
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
+    return Consumer<CartProvider>(
       builder: (context, cart, child) {
-        int total = 0;
-        for (var i = 0; i < cart.cart.length; i++) {
-          total += cart.cart[i].amount * int.parse(cart.cart[i].price);
-        }
         return Scaffold(
           body: Container(
             width: double.infinity,
             height: double.infinity,
             child: cart.cart.length == 0
-                ? Center(
-                    child: Row(
-                      children: [
-                        Text(
-                          "No order yet, Let's add some!",
-                          style: Theme.of(context).textTheme.headline5,
-                        ),
-                      ],
-                    ),
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "No order yet, Let's add some!",
+                        style: Theme.of(context).textTheme.headline5,
+                      ),
+                    ],
                   )
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -131,7 +131,7 @@ class _CartDetailState extends State<CartDetail> {
                                     fontSize: 35, fontWeight: FontWeight.w700),
                               ),
                               Text(
-                                "$total",
+                                "${cart.calcTotal()}",
                                 style: TextStyle(
                                     fontSize: 35, fontWeight: FontWeight.w700),
                               ),
@@ -139,18 +139,34 @@ class _CartDetailState extends State<CartDetail> {
                           ),
                         ),
                       ),
-                      Container(
-                        height: 50,
-                        margin: EdgeInsets.all(10),
-                        child: buildElevatedButton(
-                          "CheckOut",
-                          Colors.green.shade500,
-                          () {
-                            cart.cart = [];
-                            total = 0;
-                            setState(() {});
-                            showToast("Order success", Colors.green);
-                          },
+                      Consumer<BillProvider>(
+                        builder: (context, billProvider, child) =>
+                            IntrinsicHeight(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                buildElevatedButton(
+                                  "CheckOut",
+                                  Colors.green.shade500,
+                                  50,
+                                  27,
+                                  () {
+                                    Bill newBill = new Bill(
+                                        id: UniqueKey(),
+                                        total: cart.calcTotal().toString(),
+                                        foodOrder: cart.cart,
+                                        createdAt: formattedDate);
+                                    billProvider.bill.add(newBill);
+                                    cart.cart = [];
+                                    cart.total = 0;
+                                    setState(() {});
+                                    showToast("Order success", Colors.green);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ],

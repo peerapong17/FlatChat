@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:login_ui/auth/login/login_screen.dart';
 import 'package:login_ui/utils/show_alert_dialog.dart';
 
 // ignore: must_be_immutable
@@ -19,17 +20,14 @@ class DrawerList extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: isLoggedOut != null
-          ? () {
-              showAlertDialog(
-                context: context,
-                title: "Are you sure?",
-                content: "Thank for using our service.",
-                onTap: () {
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      CupertinoPageRoute(builder: (context) => page),
-                      (route) => false);
-                },
+          ? () async {
+              await showAlertDialog(context: context);
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SignInScreen(),
+                ),
+                (route) => false,
               );
             }
           : () {

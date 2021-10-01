@@ -1,20 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:login_ui/food-shop/screens/cart_detail.dart';
-import 'package:login_ui/food-shop/screens/dessert.dart';
-import 'package:login_ui/food-shop/screens/drink.dart';
-import 'package:login_ui/food-shop/screens/food.dart';
-import 'package:login_ui/food-shop/state/cart.dart';
-import 'package:provider/provider.dart';
-import 'data/drawer_list.dart';
-import 'drawer/drawer-header/drawer_list.dart';
-import 'components/drawer_list_card.dart';
 
-class MainRoute extends StatefulWidget {
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:login_ui/food-shop/components/drawer_list_card.dart';
+import 'package:login_ui/food-shop/data/drawer_list.dart';
+import 'package:login_ui/food-shop/drawer/drawer-header/drawer_header.dart';
+import 'package:login_ui/food-shop/home/screens/cart_detail.dart';
+import 'package:login_ui/food-shop/home/screens/dessert.dart';
+import 'package:login_ui/food-shop/home/screens/drink.dart';
+import 'package:login_ui/food-shop/home/screens/food.dart';
+
+
+class Home extends StatefulWidget {
   @override
-  _MainRouteState createState() => _MainRouteState();
+  _HomeState createState() => _HomeState();
 }
 
-class _MainRouteState extends State<MainRoute> {
+class _HomeState extends State<Home> {
   int _currentIndex = 0;
   List<Widget> pageWidget = [Food(), Drink(), Dessert(), CartDetail()];
 

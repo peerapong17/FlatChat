@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:login_ui/food-shop/components/drawer_list_card.dart';
+import 'package:login_ui/food-shop/data/drawer_list.dart';
+import 'package:login_ui/food-shop/drawer/drawer-header/drawer_header.dart';
 
 class ShopMap extends StatefulWidget {
   @override
@@ -13,14 +16,34 @@ class _ShopMapState extends State<ShopMap> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios_outlined),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+      appBar: AppBar(
+        title: Text("Map"),
+      ),
+        drawer: Container(
+        width: 250,
+        child: Drawer(
+          child: ListView(
+            children: <Widget>[
+              drawerHeader(),
+              ...drawerList.map((e) {
+                if (e.isLoggedIn != null) {
+                  return DrawerList(
+                    icon: e.icon,
+                    title: e.title,
+                    page: e.page,
+                    isLoggedOut: true,
+                  );
+                }
+                return DrawerList(
+                  icon: e.icon,
+                  title: e.title,
+                  page: e.page,
+                );
+              })
+            ],
           ),
         ),
+      ),
         body: Container(
           height: double.infinity,
           width: double.infinity,

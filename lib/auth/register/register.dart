@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-import '../../food-shop/main_route.dart';
+import '../../food-shop/home/home.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -146,7 +146,7 @@ class _RegisterState extends State<Register> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => MainRoute()),
+                                        builder: (context) => Home()),
                                   );
                                 }
                               }

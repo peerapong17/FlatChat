@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../food-shop/main_route.dart';
+import '../../food-shop/home/home.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -98,7 +98,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MainRoute(),
+                              builder: (context) => Home(),
                             ),
                           );
                         } catch (e) {
