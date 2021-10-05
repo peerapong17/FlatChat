@@ -16,34 +16,29 @@ class _ShopMapState extends State<ShopMap> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Map"),
-      ),
+        appBar: AppBar(
+          title: Text("Map"),
+        ),
         drawer: Container(
-        width: 250,
-        child: Drawer(
-          child: ListView(
-            children: <Widget>[
-              drawerHeader(),
-              ...drawerList.map((e) {
-                if (e.isLoggedIn != null) {
-                  return DrawerList(
-                    icon: e.icon,
-                    title: e.title,
-                    page: e.page,
-                    isLoggedOut: true,
-                  );
-                }
-                return DrawerList(
-                  icon: e.icon,
-                  title: e.title,
-                  page: e.page,
-                );
-              })
-            ],
+          width: 250,
+          child: Drawer(
+            child: ListView(
+              children: <Widget>[
+                drawerHeader(),
+                ...drawerList.map(
+                  (e) {
+                    return DrawerList(
+                      icon: e.icon,
+                      title: e.title,
+                      page: e.page,
+                      isLoggedIn: e.isLoggedIn,
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
-      ),
         body: Container(
           height: double.infinity,
           width: double.infinity,

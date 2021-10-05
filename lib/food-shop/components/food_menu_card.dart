@@ -1,30 +1,35 @@
-// import 'package:flutter/material.dart';
-// import 'package:login_ui/food-shop/food/food_detail.dart';
-// import 'package:login_ui/food-shop/models/food_menu.dart';
+import 'package:flutter/material.dart';
+import 'package:login_ui/food-shop/food/screens/food_detail.dart';
+import 'package:login_ui/food-shop/models/food_menu.dart';
 
-// Padding foodMenuCard(FoodMenu foodMenu, BuildContext context) {
-//   return Padding(
-//     padding: const EdgeInsets.symmetric(vertical: 3),
-//     child: ListTile(
-//       leading: Image(
-//         image: AssetImage(foodMenu.image),
-//       ),
-//       title: Text(foodMenu.menu),
-//       subtitle: Text(foodMenu.price),
-//       trailing: Icon(Icons.arrow_forward_ios_outlined),
-//       onTap: () {
-//         Navigator.push(
-//           context,
-//           MaterialPageRoute(
-//             builder: (context) => foodDetail(
-//               foodName: foodMenu.menu,
-//               image: foodMenu.image,
-//               price: foodMenu.price,
-//               context: context,
-//             ),
-//           ),
-//         );
-//       },
-//     ),
-//   );
-// }
+Padding menuCard(FoodMenu foodMenu, BuildContext context) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 3),
+    child: ListTile(
+      leading: ClipRRect(
+        borderRadius: BorderRadius.circular(7),
+        child: Image(
+          image: AssetImage(foodMenu.image),
+          fit: BoxFit.cover,
+          width: 85,
+        ),
+      ),
+      title: Text(foodMenu.name),
+      subtitle: Text(foodMenu.price),
+      trailing: Icon(Icons.arrow_forward_ios_outlined),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FoodDetail(
+              id: foodMenu.id,
+              foodName: foodMenu.name,
+              image: foodMenu.image,
+              price: foodMenu.price,
+            ),
+          ),
+        );
+      },
+    ),
+  );
+}

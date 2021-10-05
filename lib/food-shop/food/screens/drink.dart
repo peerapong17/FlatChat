@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:login_ui/food-shop/components/food_menu_card.dart';
 import 'package:login_ui/food-shop/data/drink_menu.dart';
 import 'package:login_ui/food-shop/models/food_menu.dart';
 import 'package:login_ui/utils/show_alert_dialog.dart';
@@ -18,8 +19,7 @@ class Drink extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        var res = await showAlertDialog(
-            context: context);
+        var res = await showAlertDialog(context: context);
         return res;
       },
       child: Scaffold(
@@ -62,34 +62,7 @@ class Drink extends StatelessWidget {
                   scrollDirection: Axis.vertical,
                   itemBuilder: (ctx, index) {
                     FoodMenu drinkMenu = listDrinkMenu[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 3),
-                      child: ListTile(
-                        leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(7),
-                          child: Image(
-                            image: AssetImage(drinkMenu.image),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        title: Text(drinkMenu.name),
-                        subtitle: Text(drinkMenu.price),
-                        trailing: Icon(Icons.arrow_forward_ios_outlined),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => FoodDetail(
-                                id: drinkMenu.id,
-                                foodName: drinkMenu.name,
-                                image: drinkMenu.image,
-                                price: drinkMenu.price,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
+                    return menuCard(drinkMenu, context);
                   },
                 ),
               ),

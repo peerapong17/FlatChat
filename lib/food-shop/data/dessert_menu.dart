@@ -24,5 +24,5 @@ List<FoodMenu> listDessertMenu = [
       name: 'Eggless Chocolate Mousse',
       price: '100'),
   FoodMenu(
-      id: "12", image: 'assets/images/desserts/dessert6/ผัดไทย.jpg', name: 'Gulab Jamun', price: '80'),
+      id: "12", image: 'assets/images/desserts/dessert6.jpg', name: 'Gulab Jamun', price: '80'),
 ];

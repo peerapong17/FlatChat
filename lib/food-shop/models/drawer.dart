@@ -4,11 +4,11 @@ class DrawerModel {
   IconData icon;
   String title;
   Widget page;
-  bool? isLoggedIn;
+  bool isLoggedIn;
 
   DrawerModel(
       {required this.icon,
       required this.title,
       required this.page,
-      this.isLoggedIn});
+      required this.isLoggedIn});
 }

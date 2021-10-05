@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "564727543790-l2h40vvhdr01j77mqt1t7nsk2j156hlg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mooping.FoodMadeToOrder",
+            "certificate_hash": "e1e22064e8ccd30e041ad208126e99071f0f714a"
+          }
+        },
+        {
           "client_id": "564727543790-o4dbfltjr18ukogqn1umj6h5rhhg7iv7.apps.googleusercontent.com",
           "client_type": 3
         }

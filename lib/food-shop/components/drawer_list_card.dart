@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:login_ui/auth/login/login_screen.dart';
+import 'package:login_ui/auth/screens/sign_in_screen.dart';
 import 'package:login_ui/utils/show_alert_dialog.dart';
 
 // ignore: must_be_immutable
@@ -8,27 +8,29 @@ class DrawerList extends StatelessWidget {
   String title;
   IconData icon;
   Widget page;
-  bool? isLoggedOut;
+  bool isLoggedIn;
 
   DrawerList(
       {required this.icon,
       required this.title,
       required this.page,
-      this.isLoggedOut});
+      required this.isLoggedIn});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: isLoggedOut != null
+      onTap: isLoggedIn == true
           ? () async {
-              await showAlertDialog(context: context);
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SignInScreen(),
-                ),
-                (route) => false,
-              );
+              bool res = await showAlertDialog(context: context);
+              if (res == true) {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SignInScreen(),
+                  ),
+                  (route) => false,
+                );
+              }
             }
           : () {
               Navigator.pushReplacement(

@@ -47,21 +47,16 @@ class _UserSettingState extends State<UserSetting> {
           child: ListView(
             children: <Widget>[
               drawerHeader(),
-              ...drawerList.map((e) {
-                if (e.isLoggedIn != null) {
+              ...drawerList.map(
+                (e) {
                   return DrawerList(
                     icon: e.icon,
                     title: e.title,
                     page: e.page,
-                    isLoggedOut: true,
+                    isLoggedIn: e.isLoggedIn,
                   );
-                }
-                return DrawerList(
-                  icon: e.icon,
-                  title: e.title,
-                  page: e.page,
-                );
-              })
+                },
+              ),
             ],
           ),
         ),

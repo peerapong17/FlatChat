@@ -1,19 +1,13 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:login_ui/food-shop/data/food_menu_list.dart';
-import 'package:login_ui/food-shop/models/food_menu.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:login_ui/utils/show_alert_dialog.dart';
-
-import 'food_detail.dart';
+import 'package:login_ui/food-shop/models/food_menu.dart';
+import 'package:login_ui/food-shop/data/hot_food_list.dart';
+import 'package:login_ui/food-shop/data/food_menu_list.dart';
+import 'package:login_ui/food-shop/components/food_menu_card.dart';
 
 class Food extends StatelessWidget {
-  final List<String> hotFoodList = [
-    'assets/images/foods/ต้มยำกุ้ง.jpg',
-    'assets/images/foods/ข้าวผัด.jpg',
-    'assets/images/foods/ผัดไทย.jpg'
-  ];
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -61,34 +55,7 @@ class Food extends StatelessWidget {
                   scrollDirection: Axis.vertical,
                   itemBuilder: (ctx, index) {
                     FoodMenu foodMenu = listFoodMenu[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 3),
-                      child: ListTile(
-                        leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(7),
-                          child: Image(
-                            image: AssetImage(foodMenu.image),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        title: Text(foodMenu.name),
-                        subtitle: Text(foodMenu.price),
-                        trailing: Icon(Icons.arrow_forward_ios_outlined),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => FoodDetail(
-                                id: foodMenu.id,
-                                foodName: foodMenu.name,
-                                image: foodMenu.image,
-                                price: foodMenu.price,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
+                    return menuCard(foodMenu, context);
                   },
                 ),
               ),

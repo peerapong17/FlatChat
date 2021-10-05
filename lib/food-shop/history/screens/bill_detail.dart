@@ -1,18 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:login_ui/food-shop/models/bill.dart';
+import 'package:login_ui/utils/build_detail.dart';
+import 'package:login_ui/utils/build_table_body.dart';
+import 'package:login_ui/utils/build_table_title.dart';
 
 class BillDetail extends StatelessWidget {
-  final Bill bill;
-
+  final QueryDocumentSnapshot<Object?> bill;
   BillDetail({required this.bill});
-
-  final double iconSize = 40;
-
   @override
   Widget build(BuildContext context) {
+    print(bill['orders']);
     DateTime now = DateTime.now();
-    String formattedDate = DateFormat('yyyy-MM-dd').format(now);
+    String formattedDate = DateFormat('dd-MM-yyyy').format(now);
+    print(formattedDate);
     return Scaffold(
       appBar: AppBar(
         title: Text('Bill Detail'),
@@ -22,7 +23,63 @@ class BillDetail extends StatelessWidget {
         padding: EdgeInsets.all(10),
         child: Column(
           children: [
-            // DataTable(
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Text(
+                "Bill ID# ${bill.id}",
+                style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700),
+                textAlign: TextAlign.left,
+              ),
+            ),
+            Table(
+              border: TableBorder.all(),
+              children: [
+                TableRow(
+                  children: [
+                    buildTableTitle("Name"),
+                    buildTableTitle("Price"),
+                    buildTableTitle("Amount"),
+                    buildTableTitle("SubTotal"),
+                  ],
+                ),
+                ...bill['orders'].map(
+                  (item) {
+                    return TableRow(
+                      children: [
+                        buildTableBody(
+                          item['name'],
+                        ),
+                        buildTableBody(
+                          item['price'],
+                        ),
+                        buildTableBody(
+                          item['amount'],
+                        ),
+                        buildTableBody(
+                          item['subTotal'],
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            buildDetail("Date:",
+                bill['createdAt'].toDate().toString().split(" ")[0], 27),
+            buildDetail("Status:", "Pending...", 27),
+            buildDetail("Tax:", "0%", 27),
+            buildDetail("Total:", bill['total'], 27),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+       // DataTable(
             //   columns: [
             //     DataColumn(
             //       label: Text(
@@ -74,100 +131,3 @@ class BillDetail extends StatelessWidget {
             //     ),
             //   ],
             // ),
-            Table(
-              border: TableBorder.all(),
-              children: [
-                TableRow(
-                  children: [
-                    buildTableTitle("Name"),
-                    buildTableTitle("Price"),
-                    buildTableTitle("Amount"),
-                    buildTableTitle("Total"),
-                  ],
-                ),
-                ...bill.foodOrder.map(
-                  (item) {
-                    return TableRow(
-                      children: [
-                        buildTableBody(item.name),
-                        buildTableBody(item.price),
-                        buildTableBody(item.amount.toString()),
-                        buildTableBody((int.parse(item.price) * item.amount).toString())
-                      ],
-                    );
-                  },
-                ),
-                // TableRow(
-                //   children: [
-                //     buildTableBody("Spagetti"),
-                //     buildTableBody("60"),
-                //     buildTableBody("2"),
-                //     buildTableBody("120")
-                //   ],
-                // ),
-                // TableRow(
-                //   children: [
-                //     buildTableBody("ผักระเพรา"),
-                //     buildTableBody("35"),
-                //     buildTableBody("1"),
-                //     buildTableBody("35")
-                //   ],
-                // ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            buildDetail("Ordered At:", bill.createdAt),
-            buildDetail("Status:", "Pending..."),
-            buildDetail("Tax:", "0%"),
-            buildDetail("Total:", bill.total),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Padding buildDetail(String lable, String detail) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      child: Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              lable,
-              style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700),
-            ),
-            Text(
-              detail,
-              style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Padding buildTableTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Text(
-        title,
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-      ),
-    );
-  }
-
-  Padding buildTableBody(String body) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Text(
-        body,
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 17),
-      ),
-    );
-  }
-}

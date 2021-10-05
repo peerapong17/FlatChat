@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:login_ui/food-shop/components/food_menu_card.dart';
 import 'package:login_ui/food-shop/data/dessert_menu.dart';
 import 'package:login_ui/food-shop/models/food_menu.dart';
 import 'package:login_ui/utils/show_alert_dialog.dart';
@@ -61,34 +62,7 @@ class Dessert extends StatelessWidget {
                   scrollDirection: Axis.vertical,
                   itemBuilder: (ctx, index) {
                     FoodMenu dessertMenu = listDessertMenu[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 3),
-                      child: ListTile(
-                        leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(7),
-                          child: Image(
-                            image: AssetImage(dessertMenu.image),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        title: Text(dessertMenu.name),
-                        subtitle: Text(dessertMenu.price),
-                        trailing: Icon(Icons.arrow_forward_ios_outlined),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => FoodDetail(
-                                id: dessertMenu.id,
-                                foodName: dessertMenu.name,
-                                image: dessertMenu.image,
-                                price: dessertMenu.price,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
+                    return menuCard(dessertMenu, context);
                   },
                 ),
               ),
