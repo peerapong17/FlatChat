@@ -1,8 +1,6 @@
 import '../../food-shop/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:login_ui/utils/show_snackbar.dart';
 import 'package:login_ui/auth/services/auth.dart';
 import 'package:login_ui/auth/screens/sign_up_screen.dart';
 import 'package:login_ui/auth/utils/build_text_footer.dart';
@@ -29,7 +27,7 @@ class _SignInScreenState extends State<SignInScreen> {
         padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
         child: Form(
           key: _key,
-          child: Column(
+          child: ListView(
             children: [
               Container(
                 width: double.infinity,
@@ -100,7 +98,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     if (_key.currentState!.validate()) {
                       _key.currentState!.save();
                       await auth.signInOrCreate(
-                          context, email, password, SignInScreen(), "SIGNIN");
+                          context, email, password, Home(), "SIGNIN");
                     }
                   },
                 ),
@@ -125,7 +123,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   },
                 ),
               ),
-              Spacer(),
+              SizedBox(height: 100,),
               buildTextFooter(
                 context,
                 "Don't have an account?",

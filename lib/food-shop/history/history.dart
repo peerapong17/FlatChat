@@ -5,6 +5,7 @@ import 'package:login_ui/food-shop/components/drawer_list_card.dart';
 import 'package:login_ui/food-shop/data/drawer_list.dart';
 import 'package:login_ui/food-shop/drawer/drawer-header/drawer_header.dart';
 import 'package:login_ui/food-shop/history/screens/bill_detail.dart';
+import 'package:login_ui/food-shop/models/bill.dart';
 
 class History extends StatelessWidget {
   CollectionReference billCollection =
@@ -13,12 +14,13 @@ class History extends StatelessWidget {
 
   Future<QuerySnapshot<Object?>> getUserBill() async {
     return await billCollection
-        .where("userID", isEqualTo: auth.currentUser!.uid)
+        .where("userId", isEqualTo: auth.currentUser!.uid)
         .get();
   }
 
   @override
   Widget build(BuildContext context) {
+    // print(auth.currentUser!.uid);
     return Scaffold(
       appBar: AppBar(
         title: Text("History"),
@@ -36,11 +38,12 @@ class History extends StatelessWidget {
             scrollDirection: Axis.vertical,
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
-              var bill = snapshot.data!.docs[index];
+              Map<String, dynamic> data =
+                  snapshot.data!.docs[index].data() as Map<String, dynamic>;
+              Bill bill = Bill.fromJson(data);
               return ListTile(
                 title: Text("บิลที่ ${index + 1}"),
-                subtitle:
-                    Text(bill['createdAt'].toDate().toString().split(".")[0]),
+                subtitle: Text(bill.createdAt.toDate().toString().split(" ")[0]),
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   Navigator.push(

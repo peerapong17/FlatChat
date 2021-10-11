@@ -121,25 +121,32 @@ class FoodDetail extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 13),
+              scrollDirection: Axis.vertical,
               children: [
                 Text(
                   "Detail",
                   style: Theme.of(context).textTheme.headline5,
                 ),
-          
+                SizedBox(
+                  height: 10,
+                ),
                 Text(
                     "dlsapoldaspdlsadpasldapsd,sapdlaspdlsaodwq,dpwqdwq[d,.qp.wq[pd.[pqfolewpfewifjewufewhfw"),
-             
+                SizedBox(
+                  height: 10,
+                ),
                 Text(
                   "ทานคู่กับ",
                   style: Theme.of(context).textTheme.headline5,
                 ),
+                SizedBox(
+                  height: 10,
+                ),
                 Container(
-                  height: 200,
-                  width: double.infinity,
-                  margin: EdgeInsets.symmetric(vertical: 20),
+                  height:200,
+                  margin: EdgeInsets.symmetric(horizontal: 10),
                   child: ListView.builder(
                     itemCount: listFoodMenu.length,
                     scrollDirection: Axis.vertical,
@@ -162,91 +169,89 @@ class FoodDetail extends StatelessWidget {
                     },
                   ),
                 ),
-                Expanded(
-                  child: Container(
-                    child: Consumer<CartProvider>(
-                        builder: (context, cartProvider, child) {
-                      return Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            child: Text(
-                              "\$${int.parse(price) * cartProvider.amount}",
-                              style: Theme.of(context).textTheme.headline5,
-                            ),
-                          ),
-                          Expanded(
-                            child: Row(
-                              children: [
-                                buildIconButton(
-                                  Icons.add,
-                                  () {
-                                    cartProvider.amount += 1;
-                                  },
-                                ),
-                                SizedBox(
-                                  width: 7,
-                                ),
-                                Text(
-                                  cartProvider.amount.toString(),
-                                  style:
-                                      Theme.of(context).textTheme.headline5,
-                                ),
-                                SizedBox(
-                                  width: 7,
-                                ),
-                                buildIconButton(
-                                  Icons.remove,
-                                  () {
-                                    if (cartProvider.amount > 1) {
-                                      cartProvider.amount -= 1;
-                                    } else {
-                                      cartProvider.amount = 1;
-                                    }
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                          buildElevatedButton(
-                            "Add To Card",
-                            Colors.green.shade500,
-                            40,
-                            19,
-                            () async {
-                              bool orderExist = cartProvider.cart
-                                  .any((element) => element.name == foodName);
-                              if (orderExist) {
-                                for (int i = 0;
-                                    i < cartProvider.cart.length;
-                                    i++) {
-                                  if (cartProvider.cart[i].name == foodName) {
-                                    cartProvider.cart[i].amount +=
-                                        cartProvider.amount;
-                                  }
-                                }
-                              } else {
-                                cartProvider.cart.add(
-                                  FoodOrder(
-                                    id: id,
-                                    image: image,
-                                    name: foodName,
-                                    price: price,
-                                    amount: cartProvider.amount,
-                                  ),
-                                );
-                              }
-                            },
-                          ),
-                        ],
-                      );
-                    }),
-                  ),
-                )
               ],
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: Container(
+        height: 50,
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(horizontal: 17),
+        margin: EdgeInsets.only(bottom: 13),
+        child: Consumer<CartProvider>(builder: (context, cartProvider, child) {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                child: Text(
+                  "\$${int.parse(price) * cartProvider.amount}",
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    buildIconButton(
+                      Icons.add,
+                      () {
+                        cartProvider.amount += 1;
+                      },
+                    ),
+                    SizedBox(
+                      width: 7,
+                    ),
+                    Text(
+                      cartProvider.amount.toString(),
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
+                    SizedBox(
+                      width: 7,
+                    ),
+                    buildIconButton(
+                      Icons.remove,
+                      () {
+                        if (cartProvider.amount > 1) {
+                          cartProvider.amount -= 1;
+                        } else {
+                          cartProvider.amount = 1;
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              buildElevatedButton(
+                "Add To Card",
+                Colors.green.shade500,
+                40,
+                19,
+                () async {
+                  bool orderExist = cartProvider.cart
+                      .any((element) => element.name == foodName);
+                  if (orderExist) {
+                    for (int i = 0; i < cartProvider.cart.length; i++) {
+                      if (cartProvider.cart[i].name == foodName) {
+                        cartProvider.cart[i].amount += cartProvider.amount;
+                      }
+                    }
+                  } else {
+                    cartProvider.cart.add(
+                      FoodOrder(
+                        id: id,
+                        image: image,
+                        name: foodName,
+                        price: price,
+                        amount: cartProvider.amount,
+                      ),
+                    );
+                  }
+                },
+              ),
+            ],
+          );
+        },),
       ),
     );
   }

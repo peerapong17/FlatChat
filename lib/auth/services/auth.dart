@@ -14,20 +14,26 @@ class Auth {
       if (type == "SIGNIN") {
         await _auth.signInWithEmailAndPassword(
             email: email, password: password);
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => page,
+          ),
+          (route) => false,
+        );
       } else {
         await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => page,
+          ),
+        );
       }
     } on FirebaseException catch (error) {
       showSnack(error.message!, context);
     }
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => page,
-      ),
-    );
   }
 
   Future<void> signInWithGoogle(BuildContext context, Widget page) async {

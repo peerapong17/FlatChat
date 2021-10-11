@@ -29,7 +29,17 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     CartProvider cartProvider =
         Provider.of<CartProvider>(context, listen: false);
     for (var item in cartProvider.cart) {
-      cartEncoded.add(jsonEncode(item));
+      Map<String, dynamic> cartItem = FoodOrder(
+              id: item.id,
+              image: item.image,
+              name: item.name,
+              price: item.price,
+              amount: item.amount)
+          .toJson();
+      print(item);
+      String encodedData = jsonEncode(cartItem);
+      cartEncoded.add(encodedData);
+      print(encodedData);
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setStringList('user_cart', cartEncoded);
@@ -44,7 +54,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
     if (userCartFromPref.length != 0) {
       for (var item in userCartFromPref) {
+        print(item);
         Map<String, dynamic> decodedData = json.decode(item);
+        print(decodedData);
         userCart.add(FoodOrder.fromJson(decodedData));
       }
       cartProvider.cart = userCart;

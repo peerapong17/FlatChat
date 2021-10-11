@@ -1,19 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:login_ui/food-shop/models/bill.dart';
 import 'package:login_ui/utils/build_detail.dart';
 import 'package:login_ui/utils/build_table_body.dart';
 import 'package:login_ui/utils/build_table_title.dart';
 
 class BillDetail extends StatelessWidget {
-  final QueryDocumentSnapshot<Object?> bill;
+  final Bill bill;
   BillDetail({required this.bill});
   @override
   Widget build(BuildContext context) {
-    print(bill['orders']);
     DateTime now = DateTime.now();
-    String formattedDate = DateFormat('dd-MM-yyyy').format(now);
-    print(formattedDate);
+    // String formattedDate = DateFormat('dd-MM-yyyy').format(now);
+    // print(formattedDate);
     return Scaffold(
       appBar: AppBar(
         title: Text('Bill Detail'),
@@ -42,21 +42,21 @@ class BillDetail extends StatelessWidget {
                     buildTableTitle("SubTotal"),
                   ],
                 ),
-                ...bill['orders'].map(
+                ...bill.foodOrder.map(
                   (item) {
                     return TableRow(
                       children: [
                         buildTableBody(
-                          item['name'],
+                          item.name,
                         ),
                         buildTableBody(
-                          item['price'],
+                          item.price,
                         ),
                         buildTableBody(
-                          item['amount'],
+                          item.amount.toString(),
                         ),
                         buildTableBody(
-                          item['subTotal'],
+                          item.subTotal.toString(),
                         ),
                       ],
                     );
@@ -68,10 +68,10 @@ class BillDetail extends StatelessWidget {
               height: 10,
             ),
             buildDetail("Date:",
-                bill['createdAt'].toDate().toString().split(" ")[0], 27),
+                bill.createdAt.toDate().toString().split(" ")[0], 27),
             buildDetail("Status:", "Pending...", 27),
             buildDetail("Tax:", "0%", 27),
-            buildDetail("Total:", bill['total'], 27),
+            buildDetail("Total:", bill.total, 27),
           ],
         ),
       ),

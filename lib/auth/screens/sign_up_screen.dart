@@ -28,7 +28,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         padding: EdgeInsets.all(17),
         child: Form(
           key: _key,
-          child: Column(
+          child: ListView(
             children: [
               Container(
                 width: double.infinity,
