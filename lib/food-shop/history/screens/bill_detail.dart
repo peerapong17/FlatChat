@@ -67,8 +67,12 @@ class BillDetail extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            buildDetail("Date:",
-                bill.createdAt.toDate().toString().split(" ")[0], 27),
+            buildDetail("Name:", bill.name, 27),
+            buildDetail("Email:", bill.email, 27),
+            buildDetail("Phone number:", bill.phone, 27),
+            buildDetail("Address:", bill.address, 27),
+            buildDetail(
+                "Date:", bill.createdAt.toDate().toString().split(" ")[0], 27),
             buildDetail("Status:", "Pending...", 27),
             buildDetail("Tax:", "0%", 27),
             buildDetail("Total:", bill.total, 27),

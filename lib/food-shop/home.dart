@@ -22,13 +22,13 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with WidgetsBindingObserver {
   int _currentIndex = 0;
-  List<Widget> pageWidget = [Food(), Drink(), Dessert(), CartDetail()];
+  List<Widget> pageScreens = [Food(), Drink(), Dessert(), CartDetail()];
 
   Future<void> _storeUserCart() async {
     List<String> cartEncoded = [];
     CartProvider cartProvider =
         Provider.of<CartProvider>(context, listen: false);
-    for (var item in cartProvider.cart) {
+    for (var item in cartProvider.userCart) {
       Map<String, dynamic> cartItem = FoodOrder(
               id: item.id,
               image: item.image,
@@ -36,10 +36,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
               price: item.price,
               amount: item.amount)
           .toJson();
-      print(item);
+
       String encodedData = jsonEncode(cartItem);
+
       cartEncoded.add(encodedData);
-      print(encodedData);
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setStringList('user_cart', cartEncoded);
@@ -54,12 +54,11 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
     if (userCartFromPref.length != 0) {
       for (var item in userCartFromPref) {
-        print(item);
         Map<String, dynamic> decodedData = json.decode(item);
-        print(decodedData);
+
         userCart.add(FoodOrder.fromJson(decodedData));
       }
-      cartProvider.cart = userCart;
+      cartProvider.userCart = userCart;
     }
   }
 
@@ -87,21 +86,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         print('inactive');
         break;
       case AppLifecycleState.resumed:
-        // List<FoodOrder> userCart = [];
-        // CartProvider cartProvider =
-        //     Provider.of<CartProvider>(context, listen: false);
-        // SharedPreferences prefs = await SharedPreferences.getInstance();
-        // List<String> userCartFromPref = prefs.getStringList('user_cart')!;
-
-        // if (userCartFromPref.length != 0) {
-        //   for (var item in userCartFromPref) {
-        //     Map<String, dynamic> decodedData = json.decode(item);
-        //     userCart.add(FoodOrder.fromJson(decodedData));
-        //   }
-        //   cartProvider.cart = userCart;
-        // }
-        // print(userCart);
-        // print(cartProvider.cart);
         print('resumed');
         break;
       case AppLifecycleState.detached:
@@ -137,7 +121,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         ),
         centerTitle: true,
       ),
-      body: pageWidget[_currentIndex],
+      body: pageScreens[_currentIndex],
       drawer: Container(
         width: 250,
         child: Drawer(

@@ -8,6 +8,10 @@ class Auth {
   FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
+  User currentUser() {
+    return _auth.currentUser!;
+  }
+
   Future<void> signInOrCreate(BuildContext context, String email,
       String password, Widget page, String type) async {
     try {

@@ -145,7 +145,7 @@ class FoodDetail extends StatelessWidget {
                   height: 10,
                 ),
                 Container(
-                  height:200,
+                  height: 200,
                   margin: EdgeInsets.symmetric(horizontal: 10),
                   child: ListView.builder(
                     itemCount: listFoodMenu.length,
@@ -179,79 +179,82 @@ class FoodDetail extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 17),
         margin: EdgeInsets.only(bottom: 13),
-        child: Consumer<CartProvider>(builder: (context, cartProvider, child) {
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                child: Text(
-                  "\$${int.parse(price) * cartProvider.amount}",
-                  style: Theme.of(context).textTheme.headline5,
+        child: Consumer<CartProvider>(
+          builder: (context, cartProvider, child) {
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  child: Text(
+                    "\$${int.parse(price) * cartProvider.amount}",
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
                 ),
-              ),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    buildIconButton(
-                      Icons.add,
-                      () {
-                        cartProvider.amount += 1;
-                      },
-                    ),
-                    SizedBox(
-                      width: 7,
-                    ),
-                    Text(
-                      cartProvider.amount.toString(),
-                      style: Theme.of(context).textTheme.headline5,
-                    ),
-                    SizedBox(
-                      width: 7,
-                    ),
-                    buildIconButton(
-                      Icons.remove,
-                      () {
-                        if (cartProvider.amount > 1) {
-                          cartProvider.amount -= 1;
-                        } else {
-                          cartProvider.amount = 1;
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              buildElevatedButton(
-                "Add To Card",
-                Colors.green.shade500,
-                40,
-                19,
-                () async {
-                  bool orderExist = cartProvider.cart
-                      .any((element) => element.name == foodName);
-                  if (orderExist) {
-                    for (int i = 0; i < cartProvider.cart.length; i++) {
-                      if (cartProvider.cart[i].name == foodName) {
-                        cartProvider.cart[i].amount += cartProvider.amount;
-                      }
-                    }
-                  } else {
-                    cartProvider.cart.add(
-                      FoodOrder(
-                        id: id,
-                        image: image,
-                        name: foodName,
-                        price: price,
-                        amount: cartProvider.amount,
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      buildIconButton(
+                        Icons.add,
+                        () {
+                          cartProvider.amount += 1;
+                        },
                       ),
-                    );
-                  }
-                },
-              ),
-            ],
-          );
-        },),
+                      SizedBox(
+                        width: 7,
+                      ),
+                      Text(
+                        cartProvider.amount.toString(),
+                        style: Theme.of(context).textTheme.headline5,
+                      ),
+                      SizedBox(
+                        width: 7,
+                      ),
+                      buildIconButton(
+                        Icons.remove,
+                        () {
+                          if (cartProvider.amount > 1) {
+                            cartProvider.amount -= 1;
+                          } else {
+                            cartProvider.amount = 1;
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                buildElevatedButton(
+                  label: "Add To Card",
+                  color: Colors.green.shade500,
+                  height: 40,
+                  fontSize: 19,
+                  func: () async {
+                    bool orderExist = cartProvider.userCart
+                        .any((element) => element.name == foodName);
+                    if (orderExist) {
+                      for (int i = 0; i < cartProvider.userCart.length; i++) {
+                        if (cartProvider.userCart[i].name == foodName) {
+                          cartProvider.userCart[i].amount +=
+                              cartProvider.amount;
+                        }
+                      }
+                    } else {
+                      cartProvider.userCart.add(
+                        FoodOrder(
+                          id: id,
+                          image: image,
+                          name: foodName,
+                          price: price,
+                          amount: cartProvider.amount,
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

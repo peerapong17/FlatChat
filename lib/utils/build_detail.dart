@@ -14,6 +14,7 @@ Padding buildDetail(String lable, String detail, double fontSize) {
           Text(
             detail,
             style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w700),
+            softWrap: true,
           ),
         ],
       ),

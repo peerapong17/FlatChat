@@ -2,14 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:login_ui/food-shop/models/food_order.dart';
 
 class CartProvider extends ChangeNotifier {
-  List<FoodOrder> _cart = [];
+  List<FoodOrder> _userCart = [];
   int _total = 0;
   int _amount = 0;
 
-  List<FoodOrder> get cart => _cart;
+  List<FoodOrder> get userCart => _userCart;
 
-  set cart(List<FoodOrder> cart) {
-    _cart = cart;
+  set userCart(List<FoodOrder> cart) {
+    _userCart = cart;
     notifyListeners();
   }
 
@@ -28,8 +28,8 @@ class CartProvider extends ChangeNotifier {
 
   int calcTotal() {
     total = 0;
-    for (var i = 0; i < cart.length; i++) {
-      total += cart[i].amount * int.parse(cart[i].price);
+    for (var i = 0; i < userCart.length; i++) {
+      total += userCart[i].amount * int.parse(userCart[i].price);
     }
     return total;
   }

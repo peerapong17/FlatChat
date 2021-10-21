@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:login_ui/food-shop/check-out/check_out.dart';
 import 'package:login_ui/food-shop/models/bill.dart';
 import 'package:login_ui/food-shop/models/food_order.dart';
 import 'package:login_ui/services/bill_service.dart';
@@ -29,6 +30,15 @@ class _CartDetailState extends State<CartDetail> {
   @override
   Widget build(BuildContext context) {
     return Consumer<CartProvider>(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "No order yet, Let's add some!",
+            style: Theme.of(context).textTheme.headline5,
+          ),
+        ],
+      ),
       builder: (context, cart, child) {
         return WillPopScope(
           onWillPop: () async {
@@ -39,16 +49,8 @@ class _CartDetailState extends State<CartDetail> {
             body: Container(
               width: double.infinity,
               height: double.infinity,
-              child: cart.cart.length == 0
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "No order yet, Let's add some!",
-                          style: Theme.of(context).textTheme.headline5,
-                        ),
-                      ],
-                    )
+              child: cart.userCart.length == 0
+                  ? child
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -56,14 +58,17 @@ class _CartDetailState extends State<CartDetail> {
                           height: MediaQuery.of(context).size.height * 0.6,
                           child: ListView(
                             scrollDirection: Axis.vertical,
-                            children: cart.cart.map(
+                            children: cart.userCart.map(
                               (order) {
-                                var index = cart.cart.indexOf(order);
+                                var index = cart.userCart.indexOf(order);
                                 return Dismissible(
                                   key: UniqueKey(),
                                   onDismissed: (direction) {
                                     setState(() {
-                                      cart.cart.removeAt(index);
+                                      cart.userCart.removeAt(index);
+
+                                      //or
+                                      // cart.userCart.remove(order);
                                     });
                                   },
                                   background: Container(
@@ -86,10 +91,11 @@ class _CartDetailState extends State<CartDetail> {
                                           Icons.add,
                                           () {
                                             for (var i = 0;
-                                                i < cart.cart.length;
+                                                i < cart.userCart.length;
                                                 i++) {
-                                              if (order.id == cart.cart[i].id) {
-                                                cart.cart[i].amount++;
+                                              if (order.id ==
+                                                  cart.userCart[i].id) {
+                                                cart.userCart[i].amount++;
                                               }
                                             }
                                             setState(() {});
@@ -111,13 +117,15 @@ class _CartDetailState extends State<CartDetail> {
                                           Icons.remove,
                                           () {
                                             for (var i = 0;
-                                                i < cart.cart.length;
+                                                i < cart.userCart.length;
                                                 i++) {
-                                              if (order.id == cart.cart[i].id) {
-                                                if (cart.cart[i].amount > 0) {
-                                                  cart.cart[i].amount--;
+                                              if (order.id ==
+                                                  cart.userCart[i].id) {
+                                                if (cart.userCart[i].amount >
+                                                    0) {
+                                                  cart.userCart[i].amount--;
                                                 } else {
-                                                  cart.cart.removeAt(index);
+                                                  cart.userCart.removeAt(index);
                                                 }
                                               }
                                             }
@@ -133,59 +141,29 @@ class _CartDetailState extends State<CartDetail> {
                           ),
                         ),
                         buildDetail("Total:", "${cart.calcTotal()}", 35),
-                        Consumer<BillProvider>(
-                          builder: (context, billProvider, child) =>
-                              IntrinsicHeight(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  buildElevatedButton(
-                                    "CheckOut",
-                                    Colors.green.shade500,
-                                    50,
-                                    27,
-                                    () async {
-                                      List<FoodOrder> userCart = [];
-                                      for (var item in cart.cart) {
-                                        FoodOrder cartItem = FoodOrder(
-                                            id: item.id,
-                                            image: item.image,
-                                            name: item.name,
-                                            price: item.price,
-                                            amount: item.amount,
-                                            subTotal:
-                                                item.calcSubTotal().toString());
-                                        userCart.add(cartItem);
-                                      }
-
-                                      Map<String, dynamic> bill = new Bill(
-                                        id: Uuid().v1(),
-                                        userId: auth.currentUser!.uid,
-                                        total: cart.calcTotal().toString(),
-                                        foodOrder: userCart,
-                                        createdAt:
-                                            Timestamp.fromDate(DateTime.now()),
-                                      ).toJson();
-
-                                      await billService.addBill(context, bill);
-
-                                      SharedPreferences prefs =
-                                          await SharedPreferences.getInstance();
-
-                                      prefs.clear();
-
-                                      userCart = [];
-                                      cart.cart = [];
-                                      cart.total = 0;
-                                      
-                                      setState(() {});
-
-                                      showToast("Order success", Colors.green);
-                                    },
-                                  ),
-                                ],
-                              ),
+                        IntrinsicHeight(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                buildElevatedButton(
+                                  label: "CheckOut",
+                                  color: Colors.green.shade500,
+                                  height: 50,
+                                  fontSize: 27,
+                                  func: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => CheckOut(
+                                          userCart: cart.userCart,
+                                          total: cart.total,
+                                        ),
+                                      ),
+                                    ).then((value) => cart.userCart = []);
+                                  },
+                                ),
+                              ],
                             ),
                           ),
                         ),
