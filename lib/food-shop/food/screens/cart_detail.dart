@@ -1,20 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:login_ui/food-shop/check-out/check_out.dart';
-import 'package:login_ui/food-shop/models/bill.dart';
-import 'package:login_ui/food-shop/models/food_order.dart';
 import 'package:login_ui/services/bill_service.dart';
 import 'package:login_ui/utils/build_detail.dart';
 import 'package:login_ui/utils/show_alert_dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:login_ui/utils/show_toast.dart';
 import 'package:login_ui/utils/build_icon_button.dart';
-import 'package:login_ui/food-shop/state/bill_provider.dart';
 import 'package:login_ui/food-shop/state/cart_provider.dart';
 import 'package:login_ui/utils/build_elevated_button.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uuid/uuid.dart';
 
 class CartDetail extends StatefulWidget {
   const CartDetail({Key? key}) : super(key: key);

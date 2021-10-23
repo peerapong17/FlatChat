@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:login_ui/auth/services/auth.dart';
 import 'package:login_ui/food-shop/models/bill.dart';
 import 'package:login_ui/food-shop/models/food_order.dart';
 import 'package:login_ui/food-shop/state/bill_provider.dart';
-import 'package:login_ui/food-shop/state/cart_provider.dart';
 import 'package:login_ui/services/bill_service.dart';
 import 'package:login_ui/utils/build_elevated_button.dart';
 import 'package:login_ui/utils/show_toast.dart';
@@ -15,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 import 'helpers/location_helper.dart';
+import 'map_screen.dart';
 
 class CheckOut extends StatefulWidget {
   final List<FoodOrder> userCart;
@@ -36,8 +37,13 @@ class _CheckOutState extends State<CheckOut> {
   TextEditingController _phoneController = new TextEditingController();
   TextEditingController _addressController = new TextEditingController();
   String? _previewImageUrl;
+  double? lattitude;
+  double? longtitude;
 
   void _showPreview([double lat = 37.422, double lng = -122.084]) async {
+    lattitude = lat;
+    longtitude = lng;
+
     String? previewImageUrl = LocationHelper.getLocationPreviewImage(
       lat: lat,
       lng: lng,
@@ -72,6 +78,35 @@ class _CheckOutState extends State<CheckOut> {
     } catch (error) {
       return;
     }
+  }
+
+  Future<void> _selectOnMap(bool isSelected) async {
+    if (longtitude == null && longtitude == null) {
+      final LocationData? locData = await Location().getLocation();
+      if (locData == null) {
+        return;
+      }
+
+      longtitude = locData.longitude!;
+      lattitude = locData.latitude!;
+    }
+
+    final LatLng? selectedLocation = await Navigator.of(context).push<LatLng>(
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (ctx) => MapScreen(
+          lat: lattitude!,
+          long: longtitude!,
+          isSelected: isSelected,
+        ),
+      ),
+    );
+
+    if (selectedLocation == null) {
+      return;
+    }
+
+    _showPreview(selectedLocation.latitude, selectedLocation.longitude);
   }
 
   @override
@@ -152,24 +187,29 @@ class _CheckOutState extends State<CheckOut> {
                   ],
                 ),
               ),
-              Container(
-                height: 170,
-                width: double.infinity,
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: Colors.black),
+              GestureDetector(
+                onTap: () async {
+                  await _selectOnMap(true);
+                },
+                child: Container(
+                  height: 170,
+                  width: double.infinity,
+                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: Colors.black),
+                  ),
+                  child: _previewImageUrl == null
+                      ? Text(
+                          'No Location Chosen',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 17),
+                        )
+                      : Image.network(
+                          _previewImageUrl!,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                        ),
                 ),
-                child: _previewImageUrl == null
-                    ? Text(
-                        'No Location Chosen',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 17),
-                      )
-                    : Image.network(
-                        _previewImageUrl!,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                      ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -182,7 +222,9 @@ class _CheckOutState extends State<CheckOut> {
                     width: 10,
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      await _selectOnMap(false);
+                    },
                     child: Text("Open Map"),
                   ),
                 ],

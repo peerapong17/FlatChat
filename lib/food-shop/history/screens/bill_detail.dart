@@ -1,6 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:login_ui/food-shop/models/bill.dart';
 import 'package:login_ui/utils/build_detail.dart';
 import 'package:login_ui/utils/build_table_body.dart';
@@ -11,7 +9,7 @@ class BillDetail extends StatelessWidget {
   BillDetail({required this.bill});
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
+    // DateTime now = DateTime.now();
     // String formattedDate = DateFormat('dd-MM-yyyy').format(now);
     // print(formattedDate);
     return Scaffold(

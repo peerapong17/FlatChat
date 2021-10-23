@@ -6,7 +6,6 @@ import 'package:login_ui/food-shop/data/drink_menu.dart';
 import 'package:login_ui/food-shop/models/food_menu.dart';
 import 'package:login_ui/utils/show_alert_dialog.dart';
 
-import 'food_detail.dart';
 
 class Drink extends StatelessWidget {
   final List<String> hotDrinkList = [

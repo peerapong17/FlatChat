@@ -8,9 +8,9 @@ import 'package:login_ui/food-shop/history/screens/bill_detail.dart';
 import 'package:login_ui/food-shop/models/bill.dart';
 
 class History extends StatelessWidget {
-  CollectionReference billCollection =
+  final CollectionReference billCollection =
       FirebaseFirestore.instance.collection("Bills");
-  FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   Future<QuerySnapshot<Object?>> getUserBill() async {
     return await billCollection

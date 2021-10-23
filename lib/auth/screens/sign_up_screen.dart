@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:login_ui/auth/services/auth.dart';
-import 'package:login_ui/utils/show_snackbar.dart';
 import 'package:login_ui/auth/screens/sign_in_screen.dart';
 import 'package:login_ui/auth/utils/build_text_footer.dart';
 import 'package:form_field_validator/form_field_validator.dart';
