@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:login_ui/food-shop/components/food_menu_card.dart';
+import 'package:login_ui/food-shop/components/menu_card.dart';
 import 'package:login_ui/food-shop/data/dessert_menu.dart';
 import 'package:login_ui/food-shop/models/food_menu.dart';
 import 'package:login_ui/utils/show_alert_dialog.dart';

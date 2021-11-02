@@ -43,7 +43,7 @@ class History extends StatelessWidget {
               Bill bill = Bill.fromJson(data);
               return ListTile(
                 title: Text("บิลที่ ${index + 1}"),
-                subtitle: Text(bill.createdAt.toDate().toString().split(" ")[0]),
+                subtitle: Text(bill.orderedAt.toDate().toString().split(" ")[0]),
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   Navigator.push(

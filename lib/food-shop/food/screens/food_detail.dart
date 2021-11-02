@@ -1,25 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:login_ui/food-shop/data/food_menu_list.dart';
 import 'package:login_ui/food-shop/models/food_menu.dart';
-import 'package:login_ui/food-shop/models/food_order.dart';
-import 'package:login_ui/food-shop/state/cart_provider.dart';
+import 'package:login_ui/food-shop/state/cart.dart';
 import 'package:login_ui/utils/build_elevated_button.dart';
 import 'package:login_ui/utils/build_icon.dart';
 import 'package:login_ui/utils/build_icon_button.dart';
 import 'package:provider/provider.dart';
 
 class FoodDetail extends StatelessWidget {
-  final String id;
-  final String foodName;
-  final String image;
-  final String price;
+  final FoodMenu foodMenu;
 
-  FoodDetail({
-    required this.id,
-    required this.foodName,
-    required this.image,
-    required this.price,
-  });
+  FoodDetail(this.foodMenu);
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +35,7 @@ class FoodDetail extends StatelessWidget {
                     bottomRight: Radius.circular(17),
                   ),
                   child: Image.asset(
-                    image,
+                    foodMenu.image,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -79,7 +70,7 @@ class FoodDetail extends StatelessWidget {
                     borderRadius: BorderRadius.circular(7),
                   ),
                   child: Text(
-                    foodName,
+                    foodMenu.name,
                     style: TextStyle(fontSize: 30, color: Colors.white),
                   ),
                 ),
@@ -94,7 +85,7 @@ class FoodDetail extends StatelessWidget {
                     borderRadius: BorderRadius.circular(7),
                   ),
                   child: Text(
-                    "\$$price",
+                    "\$${foodMenu.price}",
                     style: TextStyle(fontSize: 30, color: Colors.white),
                   ),
                 ),
@@ -133,7 +124,7 @@ class FoodDetail extends StatelessWidget {
                   height: 10,
                 ),
                 Text(
-                    "dlsapoldaspdlsadpasldapsd,sapdlaspdlsaodwq,dpwqdwq[d,.qp.wq[pd.[pqfolewpfewifjewufewhfw"),
+                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type"),
                 SizedBox(
                   height: 10,
                 ),
@@ -179,14 +170,14 @@ class FoodDetail extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 17),
         margin: EdgeInsets.only(bottom: 13),
-        child: Consumer<CartProvider>(
-          builder: (context, cartProvider, child) {
+        child: Consumer<Cart>(
+          builder: (context, cartSt, child) {
             return Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
                   child: Text(
-                    "\$${int.parse(price) * cartProvider.amount}",
+                    "\$${int.parse(foodMenu.price) * cartSt.amount}",
                     style: Theme.of(context).textTheme.headline5,
                   ),
                 ),
@@ -194,17 +185,12 @@ class FoodDetail extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      buildIconButton(
-                        Icons.add,
-                        () {
-                          cartProvider.amount += 1;
-                        },
-                      ),
+                      buildIconButton(Icons.add, () => cartSt.increaseAmount()),
                       SizedBox(
                         width: 7,
                       ),
                       Text(
-                        cartProvider.amount.toString(),
+                        cartSt.amount.toString(),
                         style: Theme.of(context).textTheme.headline5,
                       ),
                       SizedBox(
@@ -212,13 +198,7 @@ class FoodDetail extends StatelessWidget {
                       ),
                       buildIconButton(
                         Icons.remove,
-                        () {
-                          if (cartProvider.amount > 1) {
-                            cartProvider.amount -= 1;
-                          } else {
-                            cartProvider.amount = 1;
-                          }
-                        },
+                        () => cartSt.decreaseAmount(),
                       ),
                     ],
                   ),
@@ -228,28 +208,7 @@ class FoodDetail extends StatelessWidget {
                   color: Colors.green.shade500,
                   height: 40,
                   fontSize: 19,
-                  func: () async {
-                    bool orderExist = cartProvider.userCart
-                        .any((element) => element.name == foodName);
-                    if (orderExist) {
-                      for (int i = 0; i < cartProvider.userCart.length; i++) {
-                        if (cartProvider.userCart[i].name == foodName) {
-                          cartProvider.userCart[i].amount +=
-                              cartProvider.amount;
-                        }
-                      }
-                    } else {
-                      cartProvider.userCart.add(
-                        FoodOrder(
-                          id: id,
-                          image: image,
-                          name: foodName,
-                          price: price,
-                          amount: cartProvider.amount,
-                        ),
-                      );
-                    }
-                  },
+                  func: () => cartSt.addToCart(foodMenu),
                 ),
               ],
             );

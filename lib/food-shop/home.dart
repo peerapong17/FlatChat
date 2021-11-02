@@ -6,7 +6,7 @@ import 'package:login_ui/food-shop/components/drawer_list_card.dart';
 import 'package:login_ui/food-shop/data/drawer_list.dart';
 import 'package:login_ui/food-shop/drawer/drawer-header/drawer_header.dart';
 import 'package:login_ui/food-shop/models/food_order.dart';
-import 'package:login_ui/food-shop/state/cart_provider.dart';
+import 'package:login_ui/food-shop/state/cart.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,8 +26,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
   Future<void> _storeUserCart() async {
     List<String> cartEncoded = [];
-    CartProvider cartProvider =
-        Provider.of<CartProvider>(context, listen: false);
+    Cart cartProvider =
+        Provider.of<Cart>(context, listen: false);
     for (var item in cartProvider.userCart) {
       Map<String, dynamic> cartItem = FoodOrder(
               id: item.id,
@@ -47,8 +47,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
   Future<void> _loadUserCart() async {
     List<FoodOrder> userCart = [];
-    CartProvider cartProvider =
-        Provider.of<CartProvider>(context, listen: false);
+    Cart cartProvider =
+        Provider.of<Cart>(context, listen: false);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> userCartFromPref = prefs.getStringList('user_cart')!;
 

@@ -5,7 +5,7 @@ import 'package:login_ui/utils/show_alert_dialog.dart';
 import 'package:login_ui/food-shop/models/food_menu.dart';
 import 'package:login_ui/food-shop/data/hot_food_list.dart';
 import 'package:login_ui/food-shop/data/food_menu_list.dart';
-import 'package:login_ui/food-shop/components/food_menu_card.dart';
+import 'package:login_ui/food-shop/components/menu_card.dart';
 
 class Food extends StatelessWidget {
   @override
@@ -34,11 +34,11 @@ class Food extends StatelessWidget {
                 options: CarouselOptions(
                     height: 200.0, autoPlay: true, aspectRatio: 16 / 9),
                 items: hotFoodList.map(
-                  (i) {
+                  (img) {
                     return Builder(
                       builder: (BuildContext context) {
                         return Image.asset(
-                          i,
+                          img,
                           fit: BoxFit.cover,
                         );
                       },

@@ -1,9 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:login_ui/food-shop/home.dart';
-import 'package:login_ui/food-shop/state/bill_provider.dart';
+import 'package:login_ui/food-shop/state/bill.dart';
 import 'package:provider/provider.dart';
-import 'food-shop/state/cart_provider.dart';
+import 'food-shop/state/cart.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,10 +21,10 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => CartProvider(),
+          create: (_) => Cart(),
         ),
         ChangeNotifierProvider(
-          create: (_) => BillProvider(),
+          create: (_) => Bill(),
         ),
       ],
       child: MaterialApp(

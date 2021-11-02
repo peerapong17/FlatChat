@@ -6,23 +6,17 @@ import 'package:login_ui/utils/build_detail.dart';
 import 'package:login_ui/utils/show_alert_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:login_ui/utils/build_icon_button.dart';
-import 'package:login_ui/food-shop/state/cart_provider.dart';
+import 'package:login_ui/food-shop/state/cart.dart';
 import 'package:login_ui/utils/build_elevated_button.dart';
 
-class CartDetail extends StatefulWidget {
-  const CartDetail({Key? key}) : super(key: key);
-
-  @override
-  _CartDetailState createState() => _CartDetailState();
-}
-
-class _CartDetailState extends State<CartDetail> {
-  BillService billService = new BillService();
-  FirebaseAuth auth = FirebaseAuth.instance;
+class CartDetail extends StatelessWidget {
+  final BillService billService = new BillService();
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CartProvider>(
+    print("refresh");
+    return Consumer<Cart>(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -32,7 +26,8 @@ class _CartDetailState extends State<CartDetail> {
           ),
         ],
       ),
-      builder: (context, cart, child) {
+      builder: (context, cartSt, child) {
+        print("inside consumer is refresh");
         return WillPopScope(
           onWillPop: () async {
             var res = await showAlertDialog(context: context);
@@ -42,7 +37,7 @@ class _CartDetailState extends State<CartDetail> {
             body: Container(
               width: double.infinity,
               height: double.infinity,
-              child: cart.userCart.length == 0
+              child: cartSt.userCart.length == 0
                   ? child
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -51,18 +46,16 @@ class _CartDetailState extends State<CartDetail> {
                           height: MediaQuery.of(context).size.height * 0.6,
                           child: ListView(
                             scrollDirection: Axis.vertical,
-                            children: cart.userCart.map(
+                            children: cartSt.userCart.map(
                               (order) {
-                                var index = cart.userCart.indexOf(order);
+                                var index = cartSt.userCart.indexOf(order);
                                 return Dismissible(
                                   key: UniqueKey(),
                                   onDismissed: (direction) {
-                                    setState(() {
-                                      cart.userCart.removeAt(index);
+                                    cartSt.userCart.removeAt(index);
 
-                                      //or
-                                      // cart.userCart.remove(order);
-                                    });
+                                    //or
+                                    // cart.userCart.remove(order);
                                   },
                                   background: Container(
                                     padding: EdgeInsets.only(left: 20),
@@ -82,17 +75,17 @@ class _CartDetailState extends State<CartDetail> {
                                       children: [
                                         buildIconButton(
                                           Icons.add,
-                                          () {
-                                            for (var i = 0;
-                                                i < cart.userCart.length;
-                                                i++) {
-                                              if (order.id ==
-                                                  cart.userCart[i].id) {
-                                                cart.userCart[i].amount++;
-                                              }
-                                            }
-                                            setState(() {});
-                                          },
+                                          () => cartSt.increaseMenuAmount(order.id)
+                                          // () {
+                                          //   for (var i = 0;
+                                          //       i < cartSt.userCart.length;
+                                          //       i++) {
+                                          //     if (order.id ==
+                                          //         cartSt.userCart[i].id) {
+                                          //       cartSt.userCart[i].amount++;
+                                          //     }
+                                          //   }
+                                          // },
                                         ),
                                         SizedBox(
                                           width: 7,
@@ -108,22 +101,23 @@ class _CartDetailState extends State<CartDetail> {
                                         ),
                                         buildIconButton(
                                           Icons.remove,
-                                          () {
-                                            for (var i = 0;
-                                                i < cart.userCart.length;
-                                                i++) {
-                                              if (order.id ==
-                                                  cart.userCart[i].id) {
-                                                if (cart.userCart[i].amount >
-                                                    0) {
-                                                  cart.userCart[i].amount--;
-                                                } else {
-                                                  cart.userCart.removeAt(index);
-                                                }
-                                              }
-                                            }
-                                            setState(() {});
-                                          },
+                                          () => cartSt.decreaseMenuAmount(order.id)
+                                          // () {
+                                          //   for (var i = 0;
+                                          //       i < cartSt.userCart.length;
+                                          //       i++) {
+                                          //     if (order.id ==
+                                          //         cartSt.userCart[i].id) {
+                                          //       if (cartSt.userCart[i].amount >
+                                          //           1) {
+                                          //         cartSt.userCart[i].amount--;
+                                          //       } else {
+                                          //         cartSt.userCart
+                                          //             .removeAt(index);
+                                          //       }
+                                          //     }
+                                          //   }
+                                          // },
                                         ),
                                       ],
                                     ),
@@ -133,7 +127,7 @@ class _CartDetailState extends State<CartDetail> {
                             ).toList(),
                           ),
                         ),
-                        buildDetail("Total:", "${cart.calcTotal()}", 35),
+                        buildDetail("Total:", "${cartSt.calcTotal()}", 35),
                         IntrinsicHeight(
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -149,11 +143,11 @@ class _CartDetailState extends State<CartDetail> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => CheckOut(
-                                          userCart: cart.userCart,
-                                          total: cart.total,
+                                          userCart: cartSt.userCart,
+                                          total: cartSt.total,
                                         ),
                                       ),
-                                    ).then((value) => cart.userCart = []);
+                                    );
                                   },
                                 ),
                               ],

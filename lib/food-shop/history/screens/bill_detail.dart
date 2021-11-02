@@ -70,7 +70,7 @@ class BillDetail extends StatelessWidget {
             buildDetail("Phone number:", bill.phone, 27),
             buildDetail("Address:", bill.address, 27),
             buildDetail(
-                "Date:", bill.createdAt.toDate().toString().split(" ")[0], 27),
+                "Date:", bill.orderedAt.toDate().toString().split(" ")[0], 27),
             buildDetail("Status:", "Pending...", 27),
             buildDetail("Tax:", "0%", 27),
             buildDetail("Total:", bill.total, 27),

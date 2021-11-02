@@ -21,12 +21,7 @@ Padding menuCard(FoodMenu foodMenu, BuildContext context) {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => FoodDetail(
-              id: foodMenu.id,
-              foodName: foodMenu.name,
-              image: foodMenu.image,
-              price: foodMenu.price,
-            ),
+            builder: (context) => FoodDetail(foodMenu),
           ),
         );
       },

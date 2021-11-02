@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class DrawerModel {
+class Drawer {
   IconData icon;
   String title;
   Widget page;
   bool isLoggedIn;
 
-  DrawerModel(
+  Drawer(
       {required this.icon,
       required this.title,
       required this.page,

@@ -4,9 +4,9 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:login_ui/auth/services/auth.dart';
-import 'package:login_ui/food-shop/models/bill.dart';
+import 'package:login_ui/food-shop/models/bill.dart' as M;
 import 'package:login_ui/food-shop/models/food_order.dart';
-import 'package:login_ui/food-shop/state/bill_provider.dart';
+import 'package:login_ui/food-shop/state/bill.dart';
 import 'package:login_ui/services/bill_service.dart';
 import 'package:login_ui/utils/build_elevated_button.dart';
 import 'package:login_ui/utils/show_toast.dart';
@@ -229,7 +229,7 @@ class _CheckOutState extends State<CheckOut> {
                   ),
                 ],
               ),
-              Consumer<BillProvider>(
+              Consumer<M.Bill>(
                 builder: (context, billProvider, child) => buildElevatedButton(
                   label: "CheckOut",
                   color: Colors.green.shade500,
@@ -249,7 +249,7 @@ class _CheckOutState extends State<CheckOut> {
                         userCart.add(cartItem);
                       }
 
-                      Map<String, dynamic> bill = new Bill(
+                      Map<String, dynamic> bill = new M.Bill(
                         id: Uuid().v1(),
                         userId: _auth.currentUser().uid,
                         name: _nameController.text,
@@ -258,7 +258,7 @@ class _CheckOutState extends State<CheckOut> {
                         address: _addressController.text,
                         total: widget.total.toString(),
                         foodOrder: widget.userCart,
-                        createdAt: Timestamp.fromDate(DateTime.now()),
+                        orderedAt: Timestamp.fromDate(DateTime.now()),
                       ).toJson();
 
                       await billService.addBill(context, bill);

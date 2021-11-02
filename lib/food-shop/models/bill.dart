@@ -9,7 +9,7 @@ class Bill {
   String phone;
   String address;
   String total;
-  Timestamp createdAt;
+  Timestamp orderedAt;
   List<FoodOrder> foodOrder;
 
 
@@ -21,7 +21,7 @@ class Bill {
     required this.phone,
     required this.address,
     required this.total,
-    required this.createdAt,
+    required this.orderedAt,
     required this.foodOrder,
   });
 
@@ -33,7 +33,7 @@ class Bill {
         phone: json['phone'],
         total: json["total"],
         address: json["address"],
-        createdAt: json["createdAt"],
+        orderedAt: json["createdAt"],
         foodOrder: List<FoodOrder>.from(
           json["foodOrder"].map(
             (x) => FoodOrder.fromJson(x),
@@ -49,7 +49,7 @@ class Bill {
         "phone": phone,
         "total": total,
         "address": address,
-        "createdAt": createdAt,
+        "createdAt": orderedAt,
         "foodOrder": List<Map<String, dynamic>>.from(
           foodOrder.map(
             (x) => x.toJson(),
